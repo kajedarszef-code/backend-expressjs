@@ -1,10 +1,13 @@
 import express from "express";
 import movieRoute from "./routes/movies.routes.js";
-import defaultRoute from "./routes/deufault.routes.js";
 import cors from "cors";
+import "dotenv/config";
+import { connectMongoose } from "./db/mongoose.js";
+import defaultRoute from "./routes/default.routes..js";
 
 const app = express();
 app.use(cors());
+await connectMongoose();
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -14,16 +17,13 @@ app.use((req, res, next) => {
   next();
 });
 
-
-
 app.use(express.json());
 
 const port = 3005;
 
 app.use("/", defaultRoute);
+
 app.use("/api/movies", movieRoute);
-
-
 
 app.use((err, req, res, next) => {
   res.status(500).json({
